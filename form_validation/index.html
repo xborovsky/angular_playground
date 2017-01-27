@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Angular validation example</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    </head>
+    <body ng-app="FormValidationApp">
+        <div class="container">
+            <div class="jumbotron">
+                <h1>Angular validation example</h1>
+                <p>Example of angular form validation with bootstrap</p>
+            </div>
+        </div>
+        <div class="container" ng-controller="FormValidationController as frmCtrl">
+            <form name="myForm" class="form-horizontal" novalidate>
+                <div class="form-group" ng-class="{ 'has-error': !myForm.$pristine && myForm.name.$touched && myForm.name.$invalid }">
+                    <label class="col-sm-2 control-label" for="name">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="name" id="name" required ng-minlength="5" ng-maxlength="20" ng-model="frmCtrl.user.name" />
+                        <div class="help-block" ng-messages="myForm.name.$error" ng-show="!myForm.$pristine && myForm.$invalid && myForm.name.$touched">
+                            <p ng-message="required">Your name is required.</p>
+                            <p ng-message="minlength">Your name is too short.</p>
+                            <p ng-message="maxlength">Your name is too long.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': !myForm.$pristine && myForm.email.$touched && myForm.email.$invalid }">
+                    <label class="col-sm-2 control-label" for="email">Email</label>
+                    <div class="col-sm-10">
+                        <input type="email" name="email" class="form-control" id="email" required ng-model="frmCtrl.user.email" />
+                        <div class="help-block" ng-messages="myForm.email.$error" ng-show="!myForm.$pristine && myForm.$invalid && myForm.email.$touched">
+                            <p ng-message="required">Email is required.</p>
+                            <p ng-message="email">Not a valid email.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': !myForm.$pristine && myForm.age.$touched && myForm.age.$invalid }">
+                    <label class="col-sm-2 control-label" for="age">Age</label>
+                    <div class="col-sm-10">
+                        <input type="number" name="age" class="form-control" id="age" required min="18" max="99" step="1" ng-model="frmCtrl.user.age" />
+                        <div class="help-block" ng-messages="myForm.age.$error" ng-show="!myForm.$pristine && myForm.$invalid && myForm.age.$touched">
+                            <p ng-message="required">Your age is required.</p>
+                            <p ng-message="min">Your age must be between 18 and 99.</p>
+                            <p ng-message="max">Your age must be between 18 and 99.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2">&nbsp;</div>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-default" ng-click="frmCtrl.resetData(myForm);">Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-messages.js"></script>
+        <script>
+            angular.module('FormValidationApp', ['ngMessages'])
+                .controller('FormValidationController', function() {
+                    var ctrl = this;
+                    var defaultUser = {
+                        name : '',
+                        email : '',
+                        age : ''
+                    };
+            
+                    ctrl.user = angular.copy(defaultUser);
+
+                    ctrl.resetData = function(form) {
+                        ctrl.user = angular.copy(defaultUser);
+                        form.$setPristine();
+                    };
+                });
+        </script>
+    </body>
+</html>
